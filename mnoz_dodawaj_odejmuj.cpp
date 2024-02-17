@@ -1,31 +1,66 @@
-#include <vector>
+﻿#include <vector>
 #include <stack>
 #include <iostream>
 #include <string>
+
+
+#if _DEBUG
+#define log(msg) { cout << msg << endl;}
+#else
+  #define log(string, ...) 
+#endif
 using namespace std;
 int calc(string line)
 {
     stack<int> stos;
-    for (int i = 0; i < line.size() - 1; i++)
+    log("line="<<line);
+    log("size="<<5);
+    string liczba;
+    //return 0;
+    for (int i = 0; i < line.size(); i++)
     {
-        string liczba;
-
+        
+        cout << "znak=" << line[i] << endl;
         if (line[i] == ' ')
         {
-            stos.push(stoi(liczba));
-            liczba.clear();
+            if (liczba.size() > 0) {
+                cout << "stos" << liczba << endl;
+                stos.push(stoi(liczba));
+                liczba.clear();
+            }
+
+            
         }
-        else if (line[i] == 'M')
+        else if (line[i] == 'M' or line[i]=='D' or line[i]=='O')
         {
+            //cout << "mnozenie";
             int l1 = stos.top();
             stos.pop();
             int l2 = stos.top();
             stos.pop();
-            int iloczyn = l1 * l2;
-            stos.push(iloczyn);
+            int wynik;
+            if (line[i] == 'M') {
+
+                wynik = l1 * l2;
+            }
+            else if (line[i] == 'D') {
+                wynik = l1 + l2;
+            }
+            else {
+                wynik = l2 - l1;
+            }
+            stos.push(wynik);
+
+            
+            
+        }
+        else {
+            liczba = liczba+line[i];
+            cout << "liczba=" << liczba << endl;
         }
     }
     return stos.top();
+    //return 0;
 }
 int main()
 {
@@ -33,12 +68,14 @@ int main()
     string line;
     //string b;
     cin >> n;
-    //cout << "n=" << n << endl;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cout << "n=" << n << endl;
     for (int i = 1; i <= n; i++)
     {
         getline(cin, line);
-        //cout << line << endl;
-        calc(line);
+        //
+        // cout << line << endl;
+        cout<<"wynik = " << calc(line) << endl;
     }
-    //cout << "end" << endl;
+    cout << "end" << endl;
 }
